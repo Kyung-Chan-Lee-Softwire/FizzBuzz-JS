@@ -26,16 +26,9 @@ for(let index = 3;index < process.argv.length;index++)
 const Words = ['Fizz','Buzz','Bang','Bong','Fezz'];
 for(let index = Start;index <= End;index++)
 {
-    var constraintcheck = [];
-    var printdata = [];
+    var curprintdata = [];
     var printstring = '';
-    for(let index2 = 0;index2 < Constraints.length;index2++)
-    {
-        if(index % Constraints[index2] == 0 && ConstraintInUse[index2])
-        {
-            constraintcheck.push(Constraints[index2]);
-        }
-    }
+    var constraintcheck = check(index,Constraints,ConstraintInUse);
     if(constraintcheck.length == 0)
     {
         console.log(index);
@@ -45,47 +38,64 @@ for(let index = Start;index <= End;index++)
     {
         for(let index2 = 0;index2 < constraintcheck.length;index2++)
         {
-            switch(constraintcheck[index2])
-            {
-                case 3:
-                    printdata.push(0);
-                    break;
-                case 5:
-                    printdata.push(1);
-                    break;
-                case 7:
-                    printdata.push(2);
-                    break;
-                case 11:
-                    printdata = [];
-                    printdata.push(3);
-                    break;
-                case 13:
-                    location = 0;
-                    for(let index3 = 0;index3 < printdata.length;index3++)
-                    {
-                        if(Words[printdata[index3]][0] == 'B')
-                        {
-                            location = index3;
-                            break;
-                        }
-                    }
-                    printdata.splice(location,0,4);
-                    break;
-                case 17:
-                    printdata.reverse();
-                    break;
-            }
+            manageoutput(constraintcheck[index2],curprintdata);
         }
     }
-    for(let index2 = 0;index2 < printdata.length;index2++)
+    for(let index2 = 0;index2 < curprintdata.length;index2++)
     {
-        printstring = printstring + Words[printdata[index2]];
+        printstring = printstring + Words[curprintdata[index2]];
     }
-    if(printdata.length == 0)
+    if(curprintdata.length == 0)
     {
         console.log(index);
         continue;
     }
     console.log(printstring);
+}
+
+function check(index,criteria,validity)
+{
+    var divisible = [];
+    for(var i = 0;i < criteria.length;i++)
+    {
+        if(index % criteria[i] == 0 && validity[i])
+        {
+            divisible.push(criteria[i]);
+        }
+    }
+    return divisible;
+}
+
+function manageoutput(rule, printdata)
+{
+    switch(rule)
+    {
+        case 3:
+            printdata.push(0);
+            break;
+        case 5:
+            printdata.push(1);
+            break;
+        case 7:
+            printdata.push(2);
+            break;
+        case 11:
+            printdata.splice(0,printdata.length,3);
+            break;
+        case 13:
+            location = 0;
+            for(let index3 = 0;index3 < printdata.length;index3++)
+            {
+                if(Words[printdata[index3]][0] == 'B')
+                {
+                    location = index3;
+                    break;
+                }
+            }
+            printdata.splice(location,0,4);
+            break;
+        case 17:
+            printdata.reverse();
+            break;
+    }
 }
